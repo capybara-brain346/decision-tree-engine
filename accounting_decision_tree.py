@@ -30,3 +30,15 @@ class DecisionNode(Node):
             return self.false_node.evaluate(context)
         else:
             return None
+
+
+class OutcomeNode(Node):
+    def __init__(self, value, action: Optional[Callable]) -> None:
+        self.value = value
+        self.action = action
+
+    def evaluate(self, context):
+        if self.action:
+            self.action(context)
+
+        return self.value
