@@ -42,3 +42,28 @@ class OutcomeNode(Node):
             self.action(context)
 
         return self.value
+
+
+class MultiBranchNode(Node):
+    def __init__(self, name):
+        self.name = name
+        self.branches = []
+        self.default_node = None
+
+    def add_branch(self, condition, node):
+        self.branches.append((condition, node))
+        return self
+
+    def set_branch(self, node):
+        self.default_node = node
+        return self
+
+    def evaluate(self, context):
+        for condition, node in self.branches:
+            if condition(context):
+                return node.evaluate(context)
+        
+        if self.default_node:
+            return self.default_node.evaluate(context)
+        
+        return None
