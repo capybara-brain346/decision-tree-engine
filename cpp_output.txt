@@ -1,0 +1,122 @@
+=== Loan Approval Decision Tree ===
+
+
+=== Tree Structure (JSON) ===
+{
+  "type": "decision",
+  "name": "Loan Amount Check",
+  "trueBranch": 
+  {
+    "type": "decision",
+    "name": "Income Check",
+    "trueBranch": 
+    {
+      "type": "decision",
+      "name": "Credit Score Check",
+      "trueBranch": 
+      {
+        "type": "outcome",
+        "value": "APPROVED",
+        "hasAction": true
+      },
+      "falseBranch": 
+      {
+        "type": "outcome",
+        "value": "DENIED - Low Credit Score",
+        "hasAction": false
+      }
+    },
+    "falseBranch": 
+    {
+      "type": "outcome",
+      "value": "DENIED - Insufficient Income",
+      "hasAction": false
+    }
+  },
+  "falseBranch": 
+  {
+    "type": "outcome",
+    "value": "MANUAL REVIEW REQUIRED",
+    "hasAction": false
+  }
+}
+
+
+=== Test Results ===
+Test Case 1:
+  Amount: 50000, Income: 75000, Credit: 700
+  -> Loan approved for $50000
+  Result: APPROVED
+
+Test Case 2:
+  Amount: 50000, Income: 40000, Credit: 700
+  Result: DENIED - Insufficient Income
+
+Test Case 3:
+  Amount: 50000, Income: 75000, Credit: 600
+  Result: DENIED - Low Credit Score
+
+Test Case 4:
+  Amount: 150000, Income: 75000, Credit: 700
+  Result: MANUAL REVIEW REQUIRED
+
+
+=== Risk Assessment (Multi-Branch) ===
+
+=== Tree Structure (JSON) ===
+{
+  "type": "multibranch",
+  "name": "Risk Level",
+  "branches": [
+    {
+      "condition": "branch_0",
+      "node": 
+      {
+        "type": "outcome",
+        "value": "LOW RISK",
+        "hasAction": false
+      }
+    },
+    {
+      "condition": "branch_1",
+      "node": 
+      {
+        "type": "outcome",
+        "value": "MEDIUM RISK",
+        "hasAction": false
+      }
+    },
+    {
+      "condition": "branch_2",
+      "node": 
+      {
+        "type": "outcome",
+        "value": "HIGH RISK",
+        "hasAction": false
+      }
+    },
+    {
+      "condition": "default",
+      "node": 
+      {
+        "type": "outcome",
+        "value": "CRITICAL RISK",
+        "hasAction": false
+      }
+    }
+  ]
+}
+
+=== Test Results ===
+Case: Credit=780, Debt Ratio=0.25
+Risk: LOW RISK
+
+Case: Credit=680, Debt Ratio=0.4
+Risk: MEDIUM RISK
+
+Case: Credit=600, Debt Ratio=0.6
+Risk: HIGH RISK
+
+Case: Credit=500, Debt Ratio=0.8
+Risk: CRITICAL RISK
+
