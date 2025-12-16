@@ -1,5 +1,4 @@
-#ifndef DECISION_TREE_H
-#define DECISION_TREE_H
+#pragma once
 
 #include <iostream>
 #include <memory>
@@ -45,10 +44,10 @@ class OutcomeNode : public Node {
 private:
     Result value_;
     Action action_;
-    
+
 public:
     OutcomeNode(Result value, Action action = nullptr);
-    
+
     Result evaluate(const Context& context) const override;
     std::string getType() const override;
     std::string toJson(int indent = 0) const override;
@@ -60,17 +59,17 @@ private:
     Condition condition_;
     NodePtr trueNode_;
     NodePtr falseNode_;
-    
+
 public:
-    DecisionNode(const std::string& name, 
+    DecisionNode(const std::string& name,
                  Condition condition,
                  NodePtr trueNode = nullptr,
                  NodePtr falseNode = nullptr);
-    
+
     Result evaluate(const Context& context) const override;
     std::string getType() const override;
     std::string toJson(int indent = 0) const override;
-    
+
     void setTrueNode(NodePtr node);
     void setFalseNode(NodePtr node);
 };
@@ -80,13 +79,13 @@ private:
     std::string name_;
     std::vector<std::pair<Condition, NodePtr>> branches_;
     NodePtr defaultNode_;
-    
+
 public:
     explicit MultiBranchNode(const std::string& name);
-    
+
     MultiBranchNode& addBranch(Condition condition, NodePtr node);
     MultiBranchNode& setDefault(NodePtr node);
-    
+
     Result evaluate(const Context& context) const override;
     std::string getType() const override;
     std::string toJson(int indent = 0) const override;
@@ -96,10 +95,10 @@ class DecisionTreeEngine {
 private:
     NodePtr root_;
     mutable std::vector<std::string> trace_;
-    
+
 public:
     explicit DecisionTreeEngine(NodePtr root);
-    
+
     Result evaluate(const Context& context, bool enableTrace = false);
     const std::vector<std::string>& getTrace() const;
     void printTree() const;
@@ -109,5 +108,3 @@ std::string resultToString(const Result& result);
 
 void loanApprovalExample();
 void riskAssessmentExample();
-
-#endif
